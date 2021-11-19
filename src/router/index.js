@@ -1,20 +1,22 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-import Home from '../views/Home.vue';
+import authRouter from '../modules/auth/router';
 import daybookRouter from '../modules/daybook/router';
+import isAuthenticatedGuard from '../modules/auth/router/auth-guard';
+import isPublicGuard from '../modules/auth/router/public-guard';
 
 const routes = [
     {
         path: '/',
-        name: 'Home',
-        component: Home
+        redirect: '/daybook'
     },
     {
-        path: '/about',
-        name: 'About',
-        component: () => import('../views/About.vue')
+        path: '/auth',
+        beforeEnter: [isPublicGuard],
+        ...authRouter
     },
     {
         path: '/daybook',
+        beforeEnter: [isAuthenticatedGuard],
         ...daybookRouter
     },
 ]
